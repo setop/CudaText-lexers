@@ -1,4 +1,4 @@
-object SyntAnal15: TLibSyntAnalyzer
+object SyntAnal12: TLibSyntAnalyzer
   Formats = <
     item
       DisplayName = 'Symbol'
@@ -227,7 +227,7 @@ object SyntAnal15: TLibSyntAnalyzer
       DisplayName = 'Char'
       StyleName = 'String'
       TokenType = 4
-      Expression = '\#(\d+|\$\h+)\b'
+      Expression = '\#('#13#10'\d+|\$[\h]+|&[0-7]+|%[01]+'#13#10')\b'
       ColumnFrom = 0
       ColumnTo = 0
     end
@@ -704,10 +704,10 @@ object SyntAnal15: TLibSyntAnalyzer
       ConditionList = <
         item
           TagList.Strings = (
-            '('
-            '.'
+            ';'
             ':'
-            ';')
+            '.'
+            '(')
           TokenTypes = 392
         end
         item
@@ -755,9 +755,9 @@ object SyntAnal15: TLibSyntAnalyzer
       ConditionList = <
         item
           TagList.Strings = (
-            '('
+            ';'
             ':'
-            ';')
+            '(')
           TokenTypes = 392
         end
         item
@@ -798,9 +798,9 @@ object SyntAnal15: TLibSyntAnalyzer
       ConditionList = <
         item
           TagList.Strings = (
-            '('
+            ';'
             ':'
-            ';')
+            '(')
           TokenTypes = 392
         end
         item
@@ -832,6 +832,7 @@ object SyntAnal15: TLibSyntAnalyzer
         item
           TagList.Strings = (
             'end'
+            'external'
             'forward')
           TokenTypes = 4
           IgnoreCase = True
@@ -1003,7 +1004,7 @@ object SyntAnal15: TLibSyntAnalyzer
       DisplayName = 'asm section'
       StartExpression = 'asm\b'#13#10
       EndExpression = 'end'#13#10
-      SyntAnalyzer = SyntAnal1
+      SyntAnalyzer = SyntAnal2
     end>
   SampleText.Strings = (
     'unit Unit1; //Comment'
@@ -1013,9 +1014,8 @@ object SyntAnal15: TLibSyntAnalyzer
     ''
     '{$ifdef zz}'
     'const'
-    '  cColorCodes: array[0..1] of TColorCode = ('
-    '    (sName: '#39'ee'#39'; sVal: %100110),'
-    '    (sName: '#39'ddd'#39'; sVal: &700),'
+    '  cColorCodes: array[0..0] of TColorCode = ('
+    '    (sName: '#39'ee'#39' + #$FA + #%10; sVal: %10_0110 + &7_00)'
     '    );'
     '{$endif}'
     ''
@@ -1074,10 +1074,7 @@ object SyntAnal15: TLibSyntAnalyzer
     'end;'
     ''
     'initialization'
-    '  if False then'
-    '  begin'
-    '    Work;'
-    '  end;'
+    '  Work;'
     'end.')
   TokenTypeNames.Strings = (
     'Unknown'
