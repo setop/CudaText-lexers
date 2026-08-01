@@ -1,4 +1,4 @@
-object SyntAnal24: TLibSyntAnalyzer
+object SyntAnal16: TLibSyntAnalyzer
   Formats = <
     item
       DisplayName = 'Identifier'
@@ -213,7 +213,15 @@ object SyntAnal24: TLibSyntAnalyzer
       ColumnTo = 0
     end
     item
-      DisplayName = 'Identifier'
+      DisplayName = 'Integer'
+      StyleName = 'Number'
+      TokenType = 6
+      Expression = '\d+\b|0x\h+\b|0b[01]+\b|x'#39'\h+'#39'|b'#39'[01]+'#39
+      ColumnFrom = 0
+      ColumnTo = 0
+    end
+    item
+      DisplayName = 'Id'
       StyleName = 'Identifier'
       TokenType = 3
       Expression = '[a-z_]\w*'
@@ -221,7 +229,7 @@ object SyntAnal24: TLibSyntAnalyzer
       ColumnTo = 0
     end
     item
-      DisplayName = 'Identifier Ext'
+      DisplayName = 'Id Ext'
       StyleName = 'Identifier Ext'
       TokenType = 3
       Expression = '(?r)\[[\w\x20]*\]'
@@ -233,14 +241,6 @@ object SyntAnal24: TLibSyntAnalyzer
       StyleName = 'Number'
       TokenType = 7
       Expression = '\d+\.?\d+e[\+\-]?\d+|\d+\.\d+'
-      ColumnFrom = 0
-      ColumnTo = 0
-    end
-    item
-      DisplayName = 'Integer'
-      StyleName = 'Number'
-      TokenType = 6
-      Expression = '\d+'
       ColumnFrom = 0
       ColumnTo = 0
     end
@@ -466,8 +466,7 @@ object SyntAnal24: TLibSyntAnalyzer
             'timestampdiff'
             'to_date'
             'to_timestamp'
-            'trim'
-            )
+            'trim')
           TokenTypes = 8
           IgnoreCase = True
         end>
@@ -878,7 +877,9 @@ object SyntAnal24: TLibSyntAnalyzer
     '      a.id_user = b.id AND'
     '      CONCAT( b.firstname, '#39' '#39',b.lastname)   = c.username AND'
     '      DATE_FORMAT(c.datetime,'#39'%m/%d/%Y'#39') ='#39'09/21/2006'#39' AND'
-    '      (SELECT COUNT(data) from sometable where Fld = '#39'YES'#39') = 6 '
+    
+      '      (SELECT COUNT(data) from sometable where Fld = '#39'YES'#39') = 0x' +
+      'FF22 '
     'GROUP BY c.session'
     'ORDER BY c.session,c.username'
     '')
@@ -899,9 +900,10 @@ object SyntAnal24: TLibSyntAnalyzer
   SkipSpaces = False
   Notes.Strings = (
     'Original lexer: from EControl'
-    'Changed by Alexey:'
+    'Changed by Alexey Torgashin (CudaText):'
     '- don'#39't show tree items (no need for SQL)'
     '- deleted styles for tree'
+    '- support hex/binary numbers'
     
       '- set keyword list from https://www.w3schools.com/sql/sql_ref_ke' +
       'ywords.asp')
